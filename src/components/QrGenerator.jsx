@@ -11,6 +11,8 @@ const QrGenerator = () => {
     const [input, setinput] = useState("")
     const [qrVisible, setqrVisible] = useState(false)
     const [showButton, setshowButton] = useState(false)
+    const [qrData, setqrData] = useState("");
+
 
     const isValidInput = (str) => {
         const pattern = /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?(\/\S*)?$/;
@@ -21,7 +23,7 @@ const QrGenerator = () => {
 
     const generateQr = () => {
         if (input.trim() !== "" && isValidInput(input.trim())) {
-
+            setqrData(input.trim());
             setqrVisible(true);
             setinput("")
 
@@ -40,46 +42,46 @@ const QrGenerator = () => {
 
     const shareButton = async () => {
 
-            try {
-                const svgElement = document.querySelector('svg');
-                const serializer = new XMLSerializer();
-                const svgString = serializer.serializeToString(svgElement);
-                const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+        try {
+            const svgElement = document.querySelector('svg');
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svgElement);
+            const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
 
-              
-                const img = new Image();
-                const url = URL.createObjectURL(svgBlob);
-                img.src = url;
 
-                img.onload = async () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
+            const img = new Image();
+            const url = URL.createObjectURL(svgBlob);
+            img.src = url;
 
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
+            img.onload = async () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
 
-                    canvas.toBlob(async (blob) => {
-                        const file = new File([blob], 'qr-code.png', { type: 'image/png' });
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
 
-                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                            await navigator.share({
-                                files: [file],
-                                title: 'QR Code',
-                                text: 'Scan this QR code',
-                            });
-                        } else {
-                            alert('Sharing not supported on this device.');
-                        }
+                canvas.toBlob(async (blob) => {
+                    const file = new File([blob], 'qr-code.png', { type: 'image/png' });
 
-                        URL.revokeObjectURL(url);
-                    }, 'image/png');
-                };
-            } catch (error) {
-                alert('Failed to share the QR code');
-                console.error(error);
-            }
-        
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: 'QR Code',
+                            text: 'Scan this QR code',
+                        });
+                    } else {
+                        alert('Sharing not supported on this device.');
+                    }
+
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
+            };
+        } catch (error) {
+            alert('Failed to share the QR code');
+            console.error(error);
+        }
+
 
 
 
@@ -102,7 +104,7 @@ const QrGenerator = () => {
                 qrVisible && (
                     <div className="flex flex-col ">
                         <div className="mx-auto my-8">
-                            <QRCodeSVG id='qr-code' value={input} size={150} />
+                            <QRCodeSVG value={qrData} size={150} />
                         </div>
                     </div>
 
