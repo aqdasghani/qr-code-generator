@@ -92,7 +92,7 @@ const QrGenerator = () => {
                 <input value={input} onChange={(e) => {
                     setinput(e.target.value)
                     setqrVisible(false)
-                }} className='p-4 border border-blue-500 rounded-4xl min-w-2xl my-8' type="text" name="input" id="input" placeholder='Enter the URL here' />
+                }} className='p-4 border border-blue-500 rounded-4xl sm:min-w-2xl my-8' type="text" name="input" id="input" placeholder='Enter the URL here' />
 
                 <button onClick={generateQr} type="button" className="text-white bg-gradient-to-r from-blue-800 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-4xl text-xl px-20 py-2.5 text-center me-2 mb-2" >Generate</button>
 
