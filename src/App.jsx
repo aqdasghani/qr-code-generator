@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import React from 'react'
 import QrGenerator from './components/QrGenerator'
-import Header from './components/header'
+import Header from './components/Header'
 
 import './App.css'
 
